@@ -65,14 +65,13 @@ export default () => {
             </Header>
             {loading && <Loading>Loading...</Loading>}
             <Movies>
-                {data?.movies?.map((m) => (
-                    <Movie
-                        key={m.id}
-                        id={m.id}
-                        // isLiked={m.isLiked}
-                        bg={m.medium_cover_image}
-                    />
-                ))}
+                {!loading && data.movies && (
+                    <Movies>
+                        {data.movies.map((m) => (
+                            <Movie key={m.id} id={m.id} bg={m.medium_cover_image} />
+                        ))}
+                    </Movies>
+                )}
             </Movies>
         </Container>
     );

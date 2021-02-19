@@ -1,6 +1,6 @@
 import { useQuery, gql } from '@apollo/client';
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 const GET_MOVIE = gql`
@@ -57,6 +57,33 @@ const Poster = styled.div`
     background-position: center center;
 `;
 
+const Suggestions = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    position: absolute;
+    width: 60%;
+    height: 20vh;
+    bottom: 1%;
+    margin-left: 6%;
+`;
+
+const SuggestionContainer = styled.div`
+    height: 20vh;
+    width: 13%;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    overflow: hidden;
+    border-radius: 7px;
+`;
+
+const SuggestionPoster = styled.div`
+    height: 100%;
+    width: 100%;
+    background-image: url(${(props) => props.bg});
+    background-size: cover;
+    background-position: center center;
+`;
+
 export default ({}) => {
     const { id } = useParams();
 
@@ -65,16 +92,26 @@ export default ({}) => {
     });
 
     return (
-        <Container>
-            <Column>
-                <Title>{loading ? 'Loading...' : data.movie.title}</Title>
-
-                <Subtitle>
-                    {data?.movie?.language} · {data?.movie?.rating}
-                </Subtitle>
-                <Description>{data?.movie?.description_full}</Description>
-            </Column>
-            <Poster bg={data?.movie?.medium_cover_image}></Poster>
-        </Container>
+        <>
+            <Container>
+                <Column>
+                    <Title>{loading ? 'Loading...' : data.movie.title}</Title>
+                    <Subtitle>
+                        {data?.movie?.language} {data?.movie?.rating}
+                    </Subtitle>
+                    <Description>{data?.movie?.description_full}</Description>
+                </Column>
+                <Poster bg={data?.movie?.medium_cover_image}></Poster>
+            </Container>
+            <Suggestions>
+                {data?.suggestions?.map((s) => (
+                    <SuggestionContainer key={s.id}>
+                        <Link to={`/${s.id}`}>
+                            <SuggestionPoster bg={s.medium_cover_image} />
+                        </Link>
+                    </SuggestionContainer>
+                ))}
+            </Suggestions>
+        </>
     );
 };

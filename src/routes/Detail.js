@@ -95,7 +95,7 @@ export default ({}) => {
         <>
             <Container>
                 <Column>
-                    <Title>{loading ? 'Loading...' : data.movie.title}</Title>
+                    <Title>{loading ? 'Loading...' : data?.movie?.title}</Title>
                     <Subtitle>
                         {data?.movie?.language} {data?.movie?.rating}
                     </Subtitle>
